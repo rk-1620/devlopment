@@ -38,7 +38,7 @@
 const mongoose = require("mongoose");
 
 //connect to mongo
-mongoose.connect("mongodb+srv://rkwork1620:VXJ0lrJ9rCaKSBQL@cluster0.i5rc2.mongodb.net/Course_selling");
+mongoose.connect("mongodb+srv://rkwork1620:@cluster0.i5rc2.mongodb.net/Course_selling");
 
 // Define the all schemas
 
