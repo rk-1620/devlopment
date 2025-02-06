@@ -1,0 +1,61 @@
+<html>
+
+<script>
+    function sum()
+    {
+        const first = document.getElementById("firstNumber").value;
+        const secondNumber = document.getElementById("secondNumber").value;
+
+        const sum = document.getElementById("sumDiv");
+        // sum.innerHTML = (parseInt(first)+parseInt(secondNumber));
+
+        // document.getElementById("sumDiv").innerHTML = (parseInt(first)+parseInt(secondNumber));
+
+        fetch("http://127.0.0.1:3000/sum?a="+first+"&b="+secondNumber)
+            .then(function(response){
+                console.log(response);
+                response.text()
+                    .then(function(ans)
+                    {
+                        console.log(ans);
+                        // document.getElementById("sumDiv").innerHTML = "Sum: " +ans.sum;
+                        sum.innerHTML = ans;
+                        // sum.innerHTML = ans.sum;
+                    });
+            });
+        
+    }
+
+    function Si()
+    {
+        const principle = document.getElementById("principle").value;
+        const rate = document.getElementById("rate").value;
+        const time = document.getElementById("time").value;
+
+        //yahan pr jo name link me bheja ja raha hai same name backend server me bhi variable k same same hona chaiye
+        fetch("http://127.0.0.1:3000/simpleInterest?principle="+principle+"&rate="+rate+"&time="+time).then(function(response){
+            response.text().then(function(finalsans)
+        {
+                document.getElementById("sidiv").innerHTML = finalsans;
+        });
+        });
+    }
+</script>
+
+    <body>
+        <input id ="firstNumber" type="text" placeholder="first number"></input><br></br>
+        <input id = "secondNumber" type="text" placeholder="Second number"></input><br></br>
+
+        <button id="finalSum" onclick="sum()" > claculate Sum</button><br></br>
+        <div id="sumDiv"></div>
+        
+        <h3>Calculate Simple interest</h3><br>
+        <input id = "principle" type = "text" placeholder="principle"><br><br>
+        <input id="rate" type="text" placeholder="rate"><br><br>
+        <input id="time" type="text" placeholder="time" ><br><br>
+
+        <button id="Simpleinterst" onclick="Si()"> Calculate Simpleinterst</button>
+        <div id="sidiv"></div>
+
+    </body>
+</html>

@@ -1,0 +1,122 @@
+<html>
+
+
+    <body>
+        <input id = "title" type="text" placeholder="title"></input><br><br>
+        <input id = "description" type="text" placeholder="description"></input><br><br>
+
+        <button id = "addTodo" onclick="addTodo()" > add</button><br><br>
+
+        <div id = "added"></div>
+
+        <script>
+
+            function markasdone(todoid){
+                const parent = document.getElementById(todoid);
+                parent.children[2].innerHTML = "Done!";
+            }
+    
+            let id=0;
+            function createChild(title, description, id)
+            {
+                const child = document.createElement("div");
+                
+                const titlediv = document.createElement("div");
+                titlediv.innerHTML = title;
+                
+                const descriptiondiv = document.createElement("div");
+                descriptiondiv.innerHTML = description;
+    
+                const buttondiv = document.createElement("button");
+                buttondiv.innerHTML = "Mark as done"
+                //TODO making the button actionable
+                buttondiv.setAttribute("onclick", `markasdone(${id})`);
+    
+                child.appendChild(titlediv);
+                child.appendChild(descriptiondiv);
+                child.appendChild(buttondiv);
+    
+                child.setAttribute("id",id);
+    
+                return child;
+    
+    
+            }
+            function addTodo()
+            {
+                const title = document.getElementById("title").value;
+                const description = document.getElementById("description").value;
+    
+                const parentdiv = document.getElementById("added");
+                
+                // //this is the basic way to do the string concatnation of the div one by one
+    
+                // const original = document.getElementById("added").innerHTML;
+                // todo.innerHTML = original +  `
+                //     <div> 
+                //         <div> ${title}</div><br>
+                //         <div>${description}</div><br>
+                //         <div><button id = "done" onclick = ""> mark as done</div><br><br>
+                //     </div>
+                // `
+    
+                // //another way to do is by using the "createElement attribute"
+    
+    
+    
+                // const outerdiv = document.createElement("div") //it will create a div element in memory that we can use further
+                // outerdiv.innerHTML = title;
+                // // it will look like this
+                // //<div> title variable </div>
+    
+                // document.getElementById("added").appendChild(outerdiv); //this append the outerdiv to div container where i want to do
+                // //look like this
+                // //<div>
+                // //  <div> title <div>
+                // //</div>
+    
+    
+                parentdiv.appendChild(createChild(title, description, id++));
+    
+    
+            }
+
+            function updateDomState(state)
+            {
+                //this is the bad way to do the update of DOM because here at first we 
+                // are clearing then adding the new state,
+                // the best way to find the diff between previous state and newer state 
+                //change accordingly
+
+                //at this react come in the frame where all these operation is handeled by react
+                //added state()  deleted()  updated()
+                // we have to do the logic part only
+                const parent = document.getElementById("added");
+                parent.innerHTML = "";
+                for(let i=0; i<state.length; i++)
+                {
+                    const child = createChild(state[i].title, state[i].description, state[i].id);
+                    parent.appendChild(child);
+                }
+            }
+
+            window.setInterval(async function () {
+                //yahan pr abhi backend server nai fetch me dene ke 
+                // liye isliye updatdomstate me hardcoded bhej rahe hai
+
+                // const res = await fetch("");
+                // const json = await res.json();
+                // updateDomState(json);
+
+                updateDomState([{
+                    title:"do gym",
+                    description:"do 5 to 7 pm",
+                    id:"1",
+                }
+                ])
+            }, 5000);
+        </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,47 @@
+<html>
+
+<script>
+    let timeout;
+
+    function deboucePopulateDiv(){
+        //to cancel the clock or clear
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            populateDiv();
+        }, 1000);
+    }
+    function populateDiv()
+    {
+        const first = document.getElementById("firstNumber").value;
+        const secondNumber = document.getElementById("secondNumber").value;
+
+        const sum = document.getElementById("sumDiv");
+        // sum.innerHTML = (parseInt(first)+parseInt(secondNumber));
+
+        // document.getElementById("sumDiv").innerHTML = (parseInt(first)+parseInt(secondNumber));
+
+        fetch("http://127.0.0.1:3000/sum?a="+first+"&b="+secondNumber)
+            .then(function(response){
+                console.log(response);
+                response.json()
+                    .then(function(ans)
+                    {
+                        console.log(ans);
+                        // document.getElementById("sumDiv").innerHTML = "Sum: " +ans.sum;
+                        sum.innerHTML = "Sum: " +ans.sum;
+                        // sum.innerHTML = ans.sum;
+                    }); 
+            });
+        
+    }
+</script>
+
+    <body>
+        <input oninput="deboucePopulateDiv()" id ="firstNumber" type="text" placeholder="first number"></input><br></br>
+        <input oninput="deboucePopulateDiv()" id = "secondNumber" type="text" placeholder="Second number"></input><br></br>
+
+        <!-- <button id="finalSum" onclick="sum()" > claculate Sum</button><br></br> -->
+        <div id="sumDiv"></div>
+
+    </body>
+</html>
