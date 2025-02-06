@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 
 const app = express();
 // username rkwork1620
-//password VXJ0lrJ9rCaKSBQL
+//password aVXJ0lrJ9rCaKSBQL
 
 // cluster link = mongodb+srv://rkwork1620:VXJ0lrJ9rCaKSBQL@cluster0.i5rc2.mongodb.net/
 app.use(express.json());
-mongoose.connect("mongodb+srv://rkwork1620:VXJ0lrJ9rCaKSBQL@cluster0.i5rc2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+mongoose.connect("mongodb+srv://rkwork1620:@cluster0.i5rc2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 
 const  User = mongoose.model('Users', {name:String, email:String, password : String });
 
