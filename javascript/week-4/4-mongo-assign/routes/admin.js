@@ -1,7 +1,9 @@
 const express = require("express");
-const adminMiddleware = require("../middleware/admin").default || require("../middleware/admin");
+const adminMiddleware = require("../middleware/admin");
 
 const router = express.Router();
+const secret = require("../config");
+const jwt = require("jsonwebtoken");
   
 const { Admin, Course } = require("../db");
 
@@ -15,6 +17,32 @@ router.post('/signup', async (req, res) => {
         password: password
     })
     res.json({ "msg": "admin created successfully" });
+});
+
+// Route for creating a new admin
+router.post('/signin',async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const admin = await Admin.findOne(
+        {
+            username,
+            password
+        })
+    console.log(username);
+    console.log(admin);
+    if(admin)
+    {
+        const token = jwt.sign({
+            username
+        }, secret.JWT_secret);
+        res.json({token});
+    }
+    else{
+        res.status(411).json({"msg":"invalid user"});
+    }
+
+
 });
 
 router.post('/courses',adminMiddleware, async (req, res) => {

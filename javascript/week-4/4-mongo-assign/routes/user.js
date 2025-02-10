@@ -2,7 +2,9 @@ const express = require("express");
 const usermiddleware = require("../middleware/user");
 
 const router = express.Router();
-  
+const jwt = require("jsonwebtoken");
+
+const secret = require("../config");
 const { User, Course } = require("../db");
 const { route } = require("./admin");
 
@@ -18,6 +20,30 @@ router.post('/signup', async (req, res) => {
     res.json({ "msg": "user created successfully" });
 });
 
+// Route for creating a new admin
+router.post('/signin', async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const user = await User.findOne(
+    {
+        username,
+        password
+    })
+
+    if(user)
+    {
+        const token = jwt.sign({
+            username
+        }, secret.JWT_secret);
+        res.json({token});
+        res.json({ "msg": "user signed in successfully" });
+    }
+    else{
+        res.status(411).json({message:"invalid user"});
+    }
+});
+
 // Example route for adding courses
 router.get('/courses',  async (req, res) => {    
     // getting the all courses that is publically published by admin for this logic is not written
@@ -31,11 +57,13 @@ router.get('/courses',  async (req, res) => {
 router.post('/courses/:courseId', usermiddleware, async (req, res) => {
     //exctracting the courseID from the body params
     const courseId = req.params.courseId;
-    const username  = req.headers.username;
-
+    const username  = req.username;
+    
+    console.log(courseId);
+    console.log(username);
     // abb course table me update krdo
     await User.updateOne({
-        username:username
+        username
     },{
         "$push":{
             // mongo syntax

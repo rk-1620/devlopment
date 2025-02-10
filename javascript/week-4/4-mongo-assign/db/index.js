@@ -36,9 +36,10 @@
 //   Output: { purchasedCourses: [ { id: 1, title: 'course title', description: 'course description', price: 100, imageLink: 'https://linktoimage.com', published: true }, ... ] }
 
 const mongoose = require("mongoose");
+const pwd = require("../config");
 
 //connect to mongo
-mongoose.connect("mongodb+srv://rkwork1620:@cluster0.i5rc2.mongodb.net/Course_selling");
+mongoose.connect(pwd.mongoPwd);
 
 // Define the all schemas
 
