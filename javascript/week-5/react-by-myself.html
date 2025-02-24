@@ -1,0 +1,50 @@
+<html>
+    <body>
+        <div id="button">
+
+        </div>
+
+        <script>
+            let state = {
+                // this is state where various component is declared in form of array
+                count : 0
+            }
+            function onButtonPress()
+            {
+                // this is our state where the state component is changes
+                state.count++;
+                buttonComponenetsRerender();
+            }
+            
+            function buttonComponenetsRerender()
+            {
+                
+                // yahan pr rerendering ka kaam ho raha jisme
+                // har changes ko wapas render krna hai
+                
+                // this line clears the dom
+                document.getElementById("button").innerHTML = "";
+
+                //this line append the changes to the dom
+                const component = buttonComponents(state.count);
+                document.getElementById("button").appendChild(component);
+            }
+
+            function buttonComponents(count)
+            {
+                //yahan pr button component html me likh gaya hai using javascript
+
+                //like this
+
+                // <div id="button">
+                // <button onclick="onButtonPress()">Count 3</button>
+                // </div>
+                const button = document.createElement("button");
+                button.innerHTML = `Count ${count}`;
+                button.setAttribute("onClick", `onButtonPress()`);
+                return button;
+            }
+            buttonComponenetsRerender();
+        </script>    
+    </body>
+</html>
