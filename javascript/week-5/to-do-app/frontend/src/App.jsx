@@ -4,20 +4,18 @@ import { Todos } from './components/Todos'
 import { useState, useEffect } from 'react'
 
 function App() {
-  const [alltodos, setTodos] = useState([])
+  const [mytodos, setmyTodos] = useState([])
 
   fetch("http://127.0.0.1:3000/todos")
     .then(async function(res){
       const json = await res.json();
-      console.log("hh");
-      console.log( alltodos)
-      setTodos(json.alltodos);
+      setmyTodos(json.alltodos)
     })
 
   return (
     <div>
         <CreateTodo></CreateTodo>
-        <Todos todos={alltodos}></Todos>
+        <Todos todos={mytodos}></Todos>
     </div>
   )
 }
