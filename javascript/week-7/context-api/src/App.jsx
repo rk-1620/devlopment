@@ -4,7 +4,7 @@
 //   const [count, setCount] = useState(0)
 
 //   // prop driling - passing the props to the farmost children going through every child present in 
-//   // the path even if the props which is not used by them. We are passing the props to children only
+//   // the path even if the props which is not used by them. We are passing the props to children only where it is needed
 //   return (
 //     <>
 //     <Count count = {count} setCount={setCount}/>
@@ -58,10 +58,6 @@
 // context api code
 
 
-
-
-
-
 import { useState } from "react"
 import { CountContext } from "./context"
 import { useContext } from "react"
@@ -70,8 +66,23 @@ function App() {
 
   // wrap the component where the props should be used inside the provider here context component is 
   // act as the provider
+
+  // context api is used for cleaner code not for the optimized rerendering
+  // to make the rerendering more optimized the recoil is used in which we are renders that component only which use
+  // the state variable we are rendering the all component as the context api does
+  
+  // code of recoil in the next part
+
   return (
     <CountContext.Provider value={{ count, setCount }}>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
       <Count />
     </CountContext.Provider>
   );
@@ -102,3 +113,61 @@ function CountRender() {
 }
 
 export default App;
+
+/******************************************************************************************************************** */
+
+// // code for recoil
+
+// // To use recoil we have make the separations between the state variables and the component we are using 
+// // we can do this by making another folder in we can declare our all stae variables
+// // at first create store folder and inside this create atom folder and inside this we can create our 
+// // state variable as atoms
+
+
+
+// // till now 1/4/2025 recoil is not introduced in react 19 version so i am using the react 18 version
+
+// import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
+// import { countAtom } from "./count";
+
+// function App() {
+//   return (
+//     <RecoilRoot>
+//       <br></br>
+//       <br></br>
+//       <br></br>
+//       <br></br>
+//       <br></br>
+//       <br></br>
+//       <br></br>
+//       <br></br>
+//       <Count />
+//     </RecoilRoot>
+//   );
+// }
+
+// function Count() {
+//   return (
+//     <div>
+//       <CountRender />
+//       <Buttons />
+//     </div>
+//   );
+// }
+
+// function CountRender() {
+//   const count = useRecoilValue(countAtom);
+//   return <div>{count}</div>;
+// }
+
+// function Buttons() {
+//   const [count, setCount] = useRecoilState(countAtom);
+//   return (
+//     <div>
+//       <button onClick={() => setCount(count + 1)}>Increase</button>
+//       <button onClick={() => setCount(count - 1)}>Decrease</button>
+//     </div>
+//   );
+// }
+
+// export default App;
