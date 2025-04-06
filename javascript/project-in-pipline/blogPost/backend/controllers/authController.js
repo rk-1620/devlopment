@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
         // Generate token
         const token = jwt.sign({ id: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: "24h" });
 
-        res.status(200).json({ token });
+        res.status(200).json({token });
     } catch (error) {
         res.status(500).json({ message: "Server Error" });
     }
