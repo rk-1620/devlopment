@@ -3,15 +3,17 @@ import { Box, Typography, Button, Container, useTheme } from '@mui/material';
 import { useAuth } from '../../hooks/useAuth';
 import blogServices from '../../services/blogServices';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {Navbar} from '../../components/common/AppBar';
-import {BlogCard} from '../blog/BlogCard';
-import  {FeatureCard} from '../blog/FeatureCard';
+import {BlogCard} from '../../components/blog/BlogCard'
+import  {FeatureCard} from '../../components/blog/FeatureCard'
 import { CircularProgress } from '@mui/material';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function HomePage() {
+  console.log("homepage entered")
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user } = useContext(AuthContext);
 
   const theme = useTheme();
   const [publicBlogs, setPublicBlogs] = useState([]);
@@ -60,7 +62,7 @@ export default function HomePage() {
       background: theme.palette.background.default,
     }}>
       <Navbar isAuthenticated={isAuthenticated} user={user} />
-
+      {console.log("hompage isAuthenticated", isAuthenticated)}
       {/* Hero Section */}
       <Box sx={{
         background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,

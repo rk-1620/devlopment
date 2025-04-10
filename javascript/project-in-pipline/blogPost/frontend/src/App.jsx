@@ -10,7 +10,7 @@ import RegisterPage from './pages/auth/RegisterPage'
 import DashboardPage from './pages/dashboard/Dashboard';
 import ProtectedRoute from './components/auth/PrivateRoute';
 import HomePage from './pages/home/HomePage'
-import { AuthProvider } from './hooks/useAuth';
+import { AuthProvider}  from './context/AuthContext';
 import CreateBlogPage from './pages/dashboard/CreateBlogPage';
 // import EditProfilePage from './pages/profile/EditProfilePage';
 import EditBlogPage from './pages/dashboard/EditBlogPage';
@@ -29,6 +29,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/usersName" element={<userName/>} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/logout" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/blogs/:id" element={<BlogDetailPage />} />
           <Route path="/getAllBlogs" element={<BlogList />} />

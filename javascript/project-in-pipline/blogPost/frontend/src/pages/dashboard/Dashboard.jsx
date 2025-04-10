@@ -55,6 +55,7 @@ import { useAuth } from '../../hooks/useAuth';
 import BlogList from '../blog/BlogList';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Navbar } from '../../components/common/AppBar';
 
 // 1. Memoize expensive components
 const blogList = memo(BlogList);
@@ -110,125 +111,7 @@ export default function DashboardPage() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {/* Navbar */}
-      <AppBar position="sticky" sx={{
-        backgroundColor: 'background.paper',
-        color: 'text.primary',
-        boxShadow: 'none',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.12)'
-      }}>
-        <Toolbar>
-          {/* Mobile menu button */}
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={handleMobileMenuOpen}
-            sx={{ mr: 2, display: { md: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          {/* Logo/Brand */}
-          <Typography 
-            variant="h6" 
-            component="div" 
-            sx={{ 
-              flexGrow: 1,
-              fontWeight: 700,
-              cursor: 'pointer'
-            }}
-            onClick={() => navigate('/')}
-          >
-            BlogSphere
-          </Typography>
-
-          {/* Desktop Navigation */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-            <Button color="inherit" onClick={() => navigate('/blogs')}>Blogs</Button>
-            {user ? (
-              <>
-                <Button color="inherit" onClick={() => navigate('/dashboard')}>Dashboard</Button>
-                <IconButton
-                  size="large"
-                  edge="end"
-                  onClick={handleMenuOpen}
-                  color="inherit"
-                >
-                  {user?.avatar ? (
-                    <Avatar alt={user.name} src={user.avatar} sx={{ width: 32, height: 32 }} />
-                  ) : (
-                    <AccountCircle />
-                  )}
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                >
-                  <MenuItem onClick={() => {
-                    handleMenuClose();
-                    navigate('/profile');
-                  }}>Profile</MenuItem>
-                  <MenuItem onClick={() => {
-                    handleMenuClose();
-                    navigate('/logout');
-                  }}>Logout</MenuItem>
-                </Menu>
-              </>
-            ) : (
-              <>
-                <Button color="inherit" onClick={() => navigate('/login')}>Login</Button>
-                <Button 
-                  variant="contained" 
-                  onClick={() => navigate('/register')}
-                  sx={{ ml: 1 }}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
-          </Box>
-
-          {/* Mobile Menu */}
-          <Menu
-            anchorEl={mobileAnchorEl}
-            open={Boolean(mobileAnchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={() => {
-              handleMenuClose();
-              navigate('/blogs');
-            }}>Blogs</MenuItem>
-            {user ? (
-              [
-                <MenuItem key="dashboard" onClick={() => {
-                  handleMenuClose();
-                  navigate('/dashboard');
-                }}>Dashboard</MenuItem>,
-                <MenuItem key="profile" onClick={() => {
-                  handleMenuClose();
-                  navigate('/profile');
-                }}>Profile</MenuItem>,
-                <MenuItem key="logout" onClick={() => {
-                  handleMenuClose();
-                  navigate('/logout');
-                }}>Logout</MenuItem>
-              ]
-            ) : (
-              [
-                <MenuItem key="login" onClick={() => {
-                  handleMenuClose();
-                  navigate('/login');
-                }}>Login</MenuItem>,
-                <MenuItem key="register" onClick={() => {
-                  handleMenuClose();
-                  navigate('/register');
-                }}>Sign Up</MenuItem>
-              ]
-            )}
-          </Menu>
-        </Toolbar>
-      </AppBar>
+      <Navbar/>
 
       {/* Your existing dashboard content */}
       <Box sx={{ p: 3, flex: 1 }}>

@@ -63,7 +63,7 @@ export default function ProfilePage() {
                 gap: 4
               }}>
                 <Avatar
-                  src={user.avatar}
+                  // src={user.avatar}
                   sx={{ 
                     width: 120, 
                     height: 120,
@@ -72,17 +72,17 @@ export default function ProfilePage() {
                     borderColor: 'primary.main'
                   }}
                 >
-                  {!user.avatar && user.name?.charAt(0).toUpperCase()}
+                  {/* {!user.avatar && user.name?.charAt(0).toUpperCase()} */}
                 </Avatar>
                 
                 <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
                   <Typography variant="h3" component="h1" gutterBottom>
-                    {user.name}
+                    {/* {user.name} */}
                   </Typography>
                   
-                  {user.bio && (
+                  {(
                     <Typography variant="body1" color="text.secondary" paragraph>
-                      {user.bio}
+                      {/* {user.bio}/ */}
                     </Typography>
                   )}
                   
@@ -110,10 +110,10 @@ export default function ProfilePage() {
                 gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
                 gap: 3
               }}>
-                <DetailItem label="Email" value={user.email} />
-                <DetailItem label="Account Type" value={user.role || 'Standard'} />
-                <DetailItem label="Member Since" value={new Date(user.createdAt).toLocaleDateString()} />
-                <DetailItem label="Last Login" value={user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'} />
+                <DetailItem label="Email" value={"rk@gmail.com"} />
+                <DetailItem label="Account Type" value={"user.role "|| 'Standard'} />
+                <DetailItem label="Member Since" value={"ew Date(user.createdAt).toLocaleDateString()"} />
+                <DetailItem label="Last Login" value={"user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'"} />
               </Box>
               
               <Divider sx={{ my: 4 }} />

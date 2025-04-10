@@ -5,9 +5,25 @@ import {
 } from '@mui/material';
 import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';  
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
+import { useLocation } from 'react-router-dom';
+// uselocation to check the current route and conditionally render components. 
+// means humlog koi bhi component conditions ke hisab se render kr sakte jaise
+// agar home hai toh some of the buttons and another buttons on dashboard page
+// used code is done below
+// {currentPath === '/dashboard' && (
+//        <component>
+//  )}
+export const Navbar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-export const Navbar = ({ isAuthenticated, user }) => {
+  const { logout } = useAuth();
+  const { user, isAuthenticated } = useContext(AuthContext); // Access context values
+  console.log("navbar entered")
+  console.log("navbar isAuthenticated",isAuthenticated);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileAnchorEl, setMobileAnchorEl] = useState(null);
@@ -22,6 +38,7 @@ export const Navbar = ({ isAuthenticated, user }) => {
   const handleNavigation = (path) => {
     handleMenuClose();
     console.log(`Navigating to ${path}`);
+    logout();
     navigate(path);
   };
 
@@ -45,11 +62,21 @@ export const Navbar = ({ isAuthenticated, user }) => {
           </Typography>
 
           {/* Desktop Navigation */}
+          
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+          {currentPath === '/' && (
+          <Button color="inherit" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+            
+            )}
             <Button color="inherit" onClick={() => navigate('/getAllBlogs')}>Blogs</Button>
+            
+            {currentPath === '/dashboard' && (
+          <Button color="inherit" onClick={() => navigate('/create-blog')}>+ Create </Button>
+            
+            )}
             {isAuthenticated ? (
               <>
-                <Button color="inherit" onClick={() => navigate('/dashboard')}>Dashboard</Button>
+                
                 <IconButton
                   size="large"
                   edge="end"

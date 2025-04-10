@@ -1,6 +1,13 @@
 import axios from 'axios';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
+
 
 const API_URL = 'http://localhost:3000/api/auth'; // Update with your backend URL
+// const navigate = useNavigate();
+// const { isAuthenticated } = useContext(AuthContext);
 
 const register = async (userData) => {
   const response = await axios.post(`${API_URL}/register`, userData);
@@ -44,8 +51,14 @@ const login = async (userData) => {
 
 
 const logout = () => {
+  
   localStorage.removeItem('token');
   localStorage.removeItem('email');
+  // const { isAuthenticated, setIsAuthenticated } = useAuth();
+  // setIsAuthenticated(false);
+  delete axios.defaults.headers.common["Authorization"];
+  // navigate('/dashboard');
+  // navigate("/login");
 };
 // console.log('localStorage user:', localStorage.getItem('user'));
 console.log('localStorage email:', localStorage.getItem('email'));
