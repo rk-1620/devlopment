@@ -3,11 +3,26 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { useAuth } from '../hooks/useAuth';
-
+const jwtDecode = (await import('jwt-decode')).jwtDecode;
+// const jwt_decode = require('jwt-decode');
 
 const API_URL = 'http://localhost:3000/api/auth'; // Update with your backend URL
+const user_API = 'http://localhost:3000/api'; 
 // const navigate = useNavigate();
 // const { isAuthenticated } = useContext(AuthContext);
+
+// const parseJwt = (token) => {
+//   try {
+//     // Split the token into parts and decode the Base64 payload
+//     const base64Url = token.split('.')[1];
+//     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+//     const payload = JSON.parse(atob(base64));
+//     return payload;
+//   } catch (error) {
+//     console.error('Error decoding token:', error);
+//     return null;
+//   }
+// };
 
 const register = async (userData) => {
   const response = await axios.post(`${API_URL}/register`, userData);
@@ -56,7 +71,7 @@ const logout = () => {
   localStorage.removeItem('email');
   // const { isAuthenticated, setIsAuthenticated } = useAuth();
   // setIsAuthenticated(false);
-  delete axios.defaults.headers.common["Authorization"];
+  // delete axios.defaults.headers.common["Authorization"];
   // navigate('/dashboard');
   // navigate("/login");
 };
@@ -64,12 +79,17 @@ const logout = () => {
 console.log('localStorage email:', localStorage.getItem('email'));
 console.log('localStorage token:', localStorage.getItem('token'));
 
-const getCurrentUser = () => {
-  return localStorage.getItem('email');
-};
 // const getCurrentUser = () => {
-//   return JSON.parse(localStorage.getItem());
+//   return localStorage.getItem('email');
 // };
+const getCurrentUser = async (token) => {
+  // const token = localStorage.getItem('token');
+  const userData = jwtDecode(token);
+  console.log("id from get user", userData.id);
+  // const userData = parseJwt(token);
+  const response = await axios.get(`${user_API}/user/details?id=${userData.id}`);
+  return response;
+};
 const authService = {
   register,
   login,

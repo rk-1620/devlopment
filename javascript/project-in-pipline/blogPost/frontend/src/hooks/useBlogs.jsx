@@ -1,73 +1,53 @@
-import { useState, useEffect, use } from 'react';
-import blogServices from '../services/blogServices'; 
-import userServices from '../services/userServices';
+import { useState, useEffect, useCallback } from 'react';
+import AllBlogService from '../services/blogServices';
+import { useAuth } from './useAuth';
 
 export default function useBlogs() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { allDetails } = useAuth();
 
-  const fetchBlogs = async () => {
+  // Wrap functions in useCallback to maintain stable references
+  const fetchBlogs = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await blogServices.getAllBlogs();
-     
-      // Log the fetched blogs for debugging
-      // console.log("Fetched blogs:", blogsWithUserDetails);
-      // console.log("Fetched blogs:", data); 
-      console.log("Fetched blogs:", data);
+      const data = await AllBlogService.getAllBlogs();
       setBlogs(data);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // No dependencies needed here
 
-  const fetchUserBlogs = async () => {
+  const fetchUserBlogs = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await blogServices.getUserBlogs();
+      const data = await AllBlogService.getUserBlogs();
       setBlogs(data);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const createNewBlog = async (blogData) => {
+  const createNewBlog = useCallback(async ( blogData ) => {
     try {
-      const newBlog = await blogServices.createBlog(blogData);
-      setBlogs([newBlog, ...blogs]);
+      console.log("blogadat from useBlogs", blogData);
+      const newBlog = await AllBlogService.createBlog(blogData, {allDetails} );
+      setBlogs(prev => [newBlog, ...prev]);
       return newBlog;
     } catch (err) {
       throw err;
     }
-  };
+  }, [allDetails]); // Add allDetails as dependency
 
-  const updateExistingBlog = async (id, blogData) => {
-    try {
-      const updatedBlog = await blogServices.updateBlog(id, blogData);
-      setBlogs(blogs.map(blog => blog._id === id ? updatedBlog : blog));
-      return updatedBlog;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  const deleteBlog = async (id) => {
-    try {
-      await blogServices.deleteBlog(id);
-      setBlogs(blogs.filter(blog => blog._id !== id));
-    } catch (err) {
-      throw err;
-    }
-  };
-
+  // Update useEffect to include fetchBlogs as dependency
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [fetchBlogs]); // Now stable because of useCallback
 
   return {
     blogs,
@@ -76,7 +56,43 @@ export default function useBlogs() {
     fetchBlogs,
     fetchUserBlogs,
     createNewBlog,
-    updateExistingBlog,
-    deleteBlog,
+    updateExistingBlog: useCallback(async (id, blogData) => {
+      try {
+        const updatedBlog = await AllBlogService.updateBlog(id, blogData);
+        setBlogs(prev => prev.map(blog => blog._id === id ? updatedBlog : blog));
+        return updatedBlog;
+      } catch (err) {
+        throw err;
+      }
+    }, []),
+    deleteBlog: useCallback(async (id) => {
+      try {
+        await AllBlogService.deleteBlog(id);
+        setBlogs(prev => prev.filter(blog => blog._id !== id));
+      } catch (err) {
+        throw err;
+      }
+    }, [])
   };
 }
+// Key Improvements:
+// useCallback for Stable References:
+// Wrapped all functions that are returned from the hook or used in effects with useCallback
+// This prevents recreation of functions on every render
+
+// Proper useEffect Dependencies:
+// Added fetchBlogs to the dependency array of the main useEffect
+// Since fetchBlogs is now memoized with useCallback, it won't cause infinite loops
+
+// Functional State Updates:
+// Changed state updates to use functional form (prev => ...) to ensure we're working with latest state
+// Prevents potential stale closure issues
+
+// Dependency Management:
+// Added allDetails as a dependency to createNewBlog since it's used inside
+// Other functions that don't depend on external values have empty dependency arrays
+
+// Why This Works:
+// Memoization: useCallback memoizes the functions so they don't change between renders unless their dependencies change
+// Dependency Tracking: The effect now properly tracks when it should re-run
+// Stable API: The hook returns the same function references unless their dependencies change

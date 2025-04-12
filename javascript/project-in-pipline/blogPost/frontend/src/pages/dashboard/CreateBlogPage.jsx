@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import BlogForm from '../blog/BlogForm';
 // agar import default hai to curly bracket use nai krte
 import useBlogs from '../../hooks/useBlogs';
-// import { useNavigate } from 'react-router-dom';
-// import { useBlogs } from '../hooks/useBlogs';
+import AllBlogService from '../../services/blogServices' 
+import { useAuth } from '../../hooks/useAuth';
 // import BlogForm from '../components/BlogForm';
 import { Container, Typography } from '@mui/material';
 
@@ -14,13 +14,19 @@ export default function CreateBlogPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // const { allDetails } = useAuth(); // Get user from global state
+  const [blogData, setBlogData] = useState({ title: "", content: "" });
+  
+
   const handleSubmit = async (blogData) => {
     try {
       setLoading(true);
       setError(null);
-      await createNewBlog(blogData);
+      console.log("blogdata from create blogPage", blogData);
+      const newBlog = await createNewBlog(blogData);
       navigate('/dashboard');
     } catch (err) {
+      console.log("error in create blogpage");
       setError(err.message);
     } finally {
       setLoading(false);

@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import LockIcon from '@mui/icons-material/Lock';
 import {Navbar} from '../../components/common/AppBar'; // Adjust the import path as necessary
+import { useEffect, useState } from 'react';
 
 export default function ProfilePage() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated , allDetails} = useAuth();
   const navigate = useNavigate();
-
+  console.log("userdetails from the profile page", allDetails);
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar /> {/* Include your navbar */}
@@ -110,9 +111,9 @@ export default function ProfilePage() {
                 gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
                 gap: 3
               }}>
-                <DetailItem label="Email" value={"rk@gmail.com"} />
+                <DetailItem label="Email" value={allDetails.email} />
                 <DetailItem label="Account Type" value={"user.role "|| 'Standard'} />
-                <DetailItem label="Member Since" value={"ew Date(user.createdAt).toLocaleDateString()"} />
+                <DetailItem label="Member Since" value={new Date(allDetails.createdAt).toLocaleDateString()} />
                 <DetailItem label="Last Login" value={"user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'"} />
               </Box>
               

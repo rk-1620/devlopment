@@ -9,6 +9,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useAuth } from '../../hooks/useAuth';
 import { useLocation } from 'react-router-dom';
+
 // uselocation to check the current route and conditionally render components. 
 // means humlog koi bhi component conditions ke hisab se render kr sakte jaise
 // agar home hai toh some of the buttons and another buttons on dashboard page
@@ -38,7 +39,7 @@ export const Navbar = () => {
   const handleNavigation = (path) => {
     handleMenuClose();
     console.log(`Navigating to ${path}`);
-    logout();
+    if(path ==="/logout") {logout();}
     navigate(path);
   };
 
@@ -64,7 +65,7 @@ export const Navbar = () => {
           {/* Desktop Navigation */}
           
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-          {currentPath === '/' && (
+          {(currentPath === '/' || currentPath === '/getAllBlogs') && (
           <Button color="inherit" onClick={() => navigate('/dashboard')}>Dashboard</Button>
             
             )}

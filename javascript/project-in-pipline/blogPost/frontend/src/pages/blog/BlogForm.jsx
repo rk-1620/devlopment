@@ -13,7 +13,7 @@ export default function BlogForm({
 
   useEffect(() => {
     setFormData(initialData);
-  }, [initialData]);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -24,6 +24,7 @@ export default function BlogForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("data from handlesubmit of blogform",formData.title);
     onSubmit(formData);
   };
 

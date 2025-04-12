@@ -11,6 +11,7 @@ const errorMiddleware = require("./middleware/errorMiddleware");
 const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const commentRoutes = require("./routes/commentRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Creating an Express app instance
 const app = express();
@@ -38,7 +39,8 @@ app.use(express.json());
 // Enable parsing of URL-encoded data (useful for form submissions)
 app.use(express.urlencoded({ extended: true }));
 
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
+const { registerUser } = require("./controllers/authController");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -52,6 +54,7 @@ app.use("/api", dbCheckRoute);
 app.use("/api/blogs", blogRoutes);  // Blog routes
 app.use("/api/auth", authRoutes);    // Authentication routes
 app.use("/api/comments", commentRoutes);
+app.use("/api/user", userRoutes);
 
 // Global Error Handling Middleware
 app.use(errorMiddleware);

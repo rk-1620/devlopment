@@ -1,5 +1,6 @@
 const Blog = require("../models/blog");
 const mongoose = require("mongoose");
+const User = require("../models/User");
 // @desc    Get all blogs
 // @route   GET /api/blogs
 // @access  Public
@@ -33,13 +34,14 @@ const getBlogById = async (req, res) => {
 // @access  Private (Requires Auth)
 const createBlog = async (req, res) => {
     try {
-      console.log("Authenticated user:", req.user); // Debug log
-  
+    //   console.log("Authenticated user:", req.user); // Debug log
+      console.log("createBlog from backend")
       const title = req.body.title;
       const content = req.body.content;
     //   const author = req.body.author;
     //   const author = new mongoose.Types.ObjectId();  
     const author = req.user._id;
+    const name = req.body.name;
       if (!title || !content) {
         return res.status(400).json({ message: "Title and content are required" });
       }
@@ -48,11 +50,19 @@ const createBlog = async (req, res) => {
         return res.status(401).json({ message: "User not authenticated" });
       }
       // Use either req.user._id or req.user.id consistently
-      await Blog.create({
+      const blog = await Blog.create({
         title,
         content,
-        author
+        author,
+        name
       });
+
+      //Add the blog's ID to the user's `blogs` array
+    await User.findByIdAndUpdate(
+      author,
+      { $push: { blogs: blog._id } }, // Add the new blog ID
+      { new: true }
+    );
     //   const blog = new Blog({
     //     title,
     //     content,
@@ -95,6 +105,11 @@ const deleteBlog = async (req, res) => {
         if (!deletedBlog) {
             return res.status(404).json({ message: "Blog not found" });
         }
+        // Remove the blog ID from the author's `blogs` array
+        await User.findByIdAndUpdate(
+            deleteBlog.author,
+            { $pull: { blogs: blog._id } } // Remove the deleted blog ID
+        );
         res.status(200).json({ message: "Blog deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: "Server Error" });

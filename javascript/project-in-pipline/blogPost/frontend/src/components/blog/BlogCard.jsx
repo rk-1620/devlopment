@@ -1,10 +1,13 @@
 // components/BlogCard.jsx
 import { Card, CardContent, Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 
 export const BlogCard = ({ blog }) => {
+  // console.log("all blogs from BlogCard", blog);
   const navigate = useNavigate();
+  const {user} = useAuth();
   
   return (
     <Card sx={{
@@ -22,7 +25,7 @@ export const BlogCard = ({ blog }) => {
           {blog.title}
         </Typography>
         <Typography variant="body2" color="text.secondary" paragraph>
-          By {blog.author?.name || 'Anonymous'}
+          By {blog.name || 'Anonymous'}
         </Typography>
         <Typography variant="body1" paragraph>
           {blog.content.substring(0, 150)}...

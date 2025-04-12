@@ -25,6 +25,9 @@
 │   ├── layout/               # Layout components
 │   │   ├── MainLayout.jsx
 │
+├── context/
+│   ├── AuthContext.jsx  
+│
 ├── hooks/                    # Custom React hooks
 │   ├── useAuth.jsx
 │   ├── useBlogs.jsx

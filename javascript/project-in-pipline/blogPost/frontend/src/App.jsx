@@ -17,6 +17,7 @@ import EditBlogPage from './pages/dashboard/EditBlogPage';
 import ProfilePage from './pages/profile/userDetail';
 import BlogDetailPage from './pages/blog/BlogDetailPage';
 import BlogList from './pages/blog/BlogList';
+// import CreateBlog from './pages/blog/BlogCreate'
 import axios from 'axios';
 
 function App() {

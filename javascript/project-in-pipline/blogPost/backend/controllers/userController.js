@@ -1,30 +1,27 @@
-// controllers/userController.js
 const User = require('../models/User');
 
-exports.getUsersByIds = async (req, res) => {
+const details = async (req, res) => {
   try {
-    const { userIds } = req.body;
-    
-    // Validate input
-    if (!userIds || !Array.isArray(userIds)) {
-      return res.status(400).json({ message: 'Invalid user IDs provided' });
+    // Get email from query params instead of body for GET requests
+    // const { email } = req.body; // Changed from req.body to req.query
+    const { id } = req.query; // Changed from req.body to req.query
+    if (!id) {
+      return res.status(400).json({ message: 'id is required' });
     }
 
-    // Fetch users with only necessary fields
-    const users = await User.find(
-      { _id: { $in: userIds } },
-      { _id: 1, name: 1, email: 1, avatar: 1 } // Only return these fields
-    ).lean();
+    // Fetch user details (excluding sensitive fields)
+    const user = await User.findOne({ _id:id })
+      .select('-password -__v -resetPasswordToken -resetPasswordExpire');
 
-    // Convert to object with ID as key for easy lookup
-    const usersMap = users.reduce((acc, user) => {
-      acc[user._id.toString()] = user;
-      return acc;
-    }, {});
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-    res.json(usersMap);
+    res.json(user);
   } catch (error) {
-    console.error('Error in getUsersByIds:', error);
-    res.status(500).json({ message: 'Server error while fetching users' });
+    console.error('Error fetching user details:', error);
+    res.status(500).json({ message: 'Server error while fetching user details' });
   }
 };
+
+module.exports = { details }; // Changed from export default
