@@ -1,0 +1,24 @@
+  javascript
+│  |───Project-1
+│  |───Project-3
+│  
+  data-collector  
+│  │  
+│  │   run-all.bat                      // Batch script to run all the processes
+│  │
+│  ├───collected-data
+│  │       fixes.jsonl                   // Stores logged fixes
+│  │       js-errors.jsonl               // Stores logged JavaScript errors
+│  │       py-errors.jsonl               // Stores logged Python errors
+│  │       training-data.jsonl           // Stores formatted dataset for model training
+│  │
+│  ├───fix-trackers
+│  │       track-js-fix.js               // Responsible for tracking and logging JS fixes
+│  │       track-py-fix.py               // Responsible for tracking and logging Python fixes
+│  │
+│  ├───formatter
+│  │       format-dataset.py             // Formats collected error and fix data into a training dataset
+│  │
+│  └───watchers
+        watch-js-errors.js           // Watches for JS errors in files and triggers error logging
+        watch-py-errors.py 

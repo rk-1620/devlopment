@@ -1,0 +1,28 @@
+
+
+bank-backend/
+├── config/
+│   └── db.js
+├── controllers/
+│   ├── accountController.js
+│   ├── bankController.js
+│   ├── transactionController.js
+│   └── userController.js
+├── middleware/
+│   └── errorMiddleware.js
+├── models/
+│   ├── Account.js
+│   ├── Bank.js
+│   ├── Transaction.js
+│   ├── User.js
+│   └── index.js
+├── routes/
+│   ├── accountRoutes.js
+│   ├── bankRoutes.js
+│   ├── transactionRoutes.js
+│   └── userRoutes.js
+├── utils/
+├── app.js
+├── server.js
+├── .env
+└── package.json

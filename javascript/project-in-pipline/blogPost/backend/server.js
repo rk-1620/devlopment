@@ -6,6 +6,9 @@
 // This allows us to keep sensitive configuration (like DB credentials) outside the code
 require("dotenv").config();
 
+// const { initJSErrorLogging } = require('../../../../data-collector/loggers/log-js-errors');
+// initJSErrorLogging();
+
 // Import required modules
 const http = require("http"); // Built-in Node.js module for creating an HTTP server
 const app = require("./app"); // Import the Express app instance from app.js

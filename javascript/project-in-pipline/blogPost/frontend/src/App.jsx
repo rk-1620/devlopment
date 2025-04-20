@@ -22,6 +22,12 @@ import axios from 'axios';
 
 function App() {
     const API_URL = 'http://localhost:3000/api/auth'; // Update with your backend URL
+
+    // if (process.env.NODE_ENV === 'development') {
+    //   const { initJSErrorLogging } = require('../../../../data-collector/loggers/log-js-errors');
+    //   initJSErrorLogging();
+    // }
+    
   return (
     <AuthProvider>
       <BrowserRouter>

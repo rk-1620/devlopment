@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+// require('../ai-dataset-collector/loggers/log_js_errors.js');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
