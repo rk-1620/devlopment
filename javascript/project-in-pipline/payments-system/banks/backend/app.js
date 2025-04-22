@@ -2,7 +2,6 @@
 
 import express from 'express';
 import dotenv from 'dotenv';
-// import mongoose from 'mongoose';
 
 import cors from 'cors';
 
@@ -39,18 +38,23 @@ app.use(cors());
 
 app.use(express.json());
 
-import connectDB from './config/db';
+import connectDB from './config/db.js';
 
 // import the all routes that is needed
-import accountsRoutes from './routes/accountsRoutes';
-import bankRoutes from './routes/bankRoutes';
-import userRoutes from './routes/userRoutes';
-import transactionRoutes from './routes/transactionRoutes';
+import adminRoutes from'./routes/adminRoutes.js';
+import accountsRoutes from './routes/accountsRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import employeeRoutes from './routes/employeeRoutes.js';
+import bankRoutes from './routes/bankRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 
+app.use('/api/v1/admin',adminRoutes);
+app.use('/api/v1/employee',employeeRoutes);
 app.use('/api/v1/accounts', accountsRoutes);
 app.use('/api/v1/banks', bankRoutes);
-app.use('api/v1/user',userRoutes);
+app.use('/api/v1/user',userRoutes);
 app.use('/api/v1/transaction',transactionRoutes);
+
 
 // Global error handing module
 app.use((error,req,res,next)=>{
