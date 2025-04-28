@@ -32,7 +32,7 @@ export const BlogCard = ({ blog }) => {
         </Typography>
       </CardContent>
       <Box sx={{ p: 2 }}>
-        <Button size="small" onClick={() => navigate(`/blogs/${blog._id}`)}>
+        <Button size="small" onClick={() => navigate(`/blogs/getBlogById/${blog._id}`)}>
           Read More
         </Button>
       </Box>

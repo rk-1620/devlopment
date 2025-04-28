@@ -38,7 +38,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/blogs/:id" element={<BlogDetailPage />} />
+          <Route path="/blogs/getBlogById/:id" element={<BlogDetailPage />} />
           <Route path="/getAllBlogs" element={<BlogList />} />
           {/* Protected routes */}
 

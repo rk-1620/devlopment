@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import blogServices from '../../services/blogServices';
+import AllBlogService from '../../services/blogServices';
 import commentService from '../../services/commentService';
 import { Box, Typography, Button, TextField, Alert } from '@mui/material';
 
@@ -18,7 +18,8 @@ export default function BlogDetailPage() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const blogData = await blogServices.getBlogById(id);
+        console.log("blog details page = ", id);
+        const blogData = await AllBlogService.getBlogById(id);
         setBlog(blogData);
         setComments(blogData.comments || []);
       } catch (err) {
@@ -50,7 +51,7 @@ export default function BlogDetailPage() {
   if (loading) return <div>Loading...</div>;
   if (error) return <Alert severity="error">{error}</Alert>;
   if (!blog) return <div>Blog not found</div>;
-
+  // console.log("blogdetailpage",blog);
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h3" gutterBottom>
@@ -58,7 +59,7 @@ export default function BlogDetailPage() {
       </Typography>
       
       <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-        By {blog.author.name}
+        By {blog.name}
       </Typography>
       
       <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line' }}>

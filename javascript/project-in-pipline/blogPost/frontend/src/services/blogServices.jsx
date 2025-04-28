@@ -22,7 +22,8 @@ getAllBlogs : async () => {
 },
 
  getBlogById : async (id) => {
-  const response = await api.get(`/blogs/${id}`);
+  console.log("blog services = ", id);
+  const response = await api.get(`/blogs/getBlogById/${id}`);
   return response.data;
 },
 

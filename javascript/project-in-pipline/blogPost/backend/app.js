@@ -12,7 +12,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const authRoutes = require("./routes/authRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const userRoutes = require("./routes/userRoutes");
-
+const adminRoutes = require("./routes/adminRoutes");
 // Creating an Express app instance
 const app = express();
 
@@ -55,6 +55,7 @@ app.use("/api/blogs", blogRoutes);  // Blog routes
 app.use("/api/auth", authRoutes);    // Authentication routes
 app.use("/api/comments", commentRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/admin",adminRoutes);
 
 // Global Error Handling Middleware
 app.use(errorMiddleware);
