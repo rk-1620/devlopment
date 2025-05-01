@@ -1,35 +1,44 @@
 const express = require('express');
-// import express from 'express';
+const router = express.Router();
 const {
-    authAdmin,
-    getAllBlogs,
-    getAllUsers,
-    deleteBlog,
-    deleteUser,
-    adminRegister,
- }  = require("../controllers/adminController.js");
-//  import {
-//     authAdmin,
-//     getAllBlogs,
-//     getAllUsers,
-//     deleteBlog,
-//     deleteUser,
-//     adminRegister,
-//  } from '../controllers/adminController.js';
+  authAdmin,
+  adminRegister,
+  getAllUsers,
+  getAllBlogs,
+  deleteUser,
+  deleteBlog
+} = require('../controllers/adminController');
+const validateRequest = require('../middleware/validateRequest');
+const {
+  adminLoginSchema,
+  adminRegisterSchema,
+  objectIdSchema
+} = require('../validators/adminValidator');
+const protectAdmin = require('../middleware/adminMidleware');
 
-//  import protectAdmin from "../middleware/adminMidleware.js";
-// import { route } from './dbCheck';
- const protectAdmin = require("../middleware/adminMidleware");
+// Public routes
+router.post('/login', 
+  validateRequest(adminLoginSchema),
+  authAdmin
+);
 
- const router = express.Router();
- 
- router.post("/login", authAdmin);
- router.post("/register", adminRegister);
- router.use(protectAdmin); // Protect everything below this line
- router.get("/getUsers", getAllUsers);
- router.get("/getBlogs", getAllBlogs);
- router.delete("/delete/user/:id", deleteUser);
- router.delete("/delete/blog/:id", deleteBlog);
+router.post('/register',
+  validateRequest(adminRegisterSchema),
+  adminRegister
+);
 
-// export default router
+// Protected admin routes
+router.use(protectAdmin);
+
+router.get('/getUsers', getAllUsers);
+router.get('/getBlogs', getAllBlogs);
+router.delete('/delete/user/:id',
+  validateRequest(objectIdSchema, 'params'),
+  deleteUser
+);
+router.delete('/delete/blog/:id',
+  validateRequest(objectIdSchema, 'params'),
+  deleteBlog
+);
+
 module.exports = router;

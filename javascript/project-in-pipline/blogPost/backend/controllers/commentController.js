@@ -1,111 +1,70 @@
-const Comment = require("../models/commentModel");
-const Blog = require("../models/blog");
+const commentService = require('../services/commentService');
 
-// @desc Add a new comment
-// @route POST /api/comments/:blogId
-// @access Private
-const addComment = async (req, res) => {
-    try {
-        const { text } = req.body;
-        const { blogId } = req.params;
-
-        // Validate input
-        if (!text || !blogId) {
-            return res.status(400).json({ message: "Text and blog ID are required" });
-        }
-
-        // Check authentication
-        if (!req.user?._id) {
-            return res.status(401).json({ message: "Not authenticated" });
-        }
-
-        // Verify blog exists
-        const blog = await Blog.findById(blogId);
-        if (!blog) {
-            return res.status(404).json({ message: "Blog not found" });
-        }
-
-        // Create comment
-        const comment = await Comment.create({
-            post: blogId,  // Matches model field name
-            user: req.user._id,
-            text
-        });
-
-        // Add comment to blog's comments array (if your Blog model has this)
-        // blog.comments.push(comment._id);
-        // await blog.save();
-
-        res.status(201).json({
-            message: "Comment added successfully",
-            comment: {
-                _id: comment._id,
-                text: comment.text,
-                user: req.user._id,
-                createdAt: comment.createdAt
-            }
-        });
-
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Error adding comment",
-            error: error.message 
-        });
-    }
+// @desc    Create comment
+// @route   POST /api/comments
+exports.createComment = async (req, res, next) => {
+  try {
+    const comment = await commentService.createComment(
+      req.user.id,
+      req.body.blogId,
+      req.body.text
+    );
+    res.status(201).json({
+      success: true,
+      data: comment
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-// @desc Get comments for a blog
-// @route GET /api/comments/:blogId
-// @access Public
-const getComments = async (req, res) => {
-    try {
-        const comments = await Comment.find({ 
-            post: req.params.blogId 
-        })
-        .populate('user', 'name email')  // Show user details
-        .sort({ createdAt: -1 });  // Newest first
-
-        res.status(200).json(comments);
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Error fetching comments",
-            error: error.message 
-        });
-    }
+// @desc    Get blog comments
+// @route   GET /api/comments/blog/:blogId
+exports.getCommentsByBlog = async (req, res, next) => {
+  try {
+    const comments = await commentService.getCommentsByBlog(req.params.blogId);
+    res.json({
+      success: true,
+      count: comments.length,
+      data: comments
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-// @desc Delete a comment (Only the owner or admin can delete)
-// @route DELETE /api/comments/:commentId
-// @access Private
-const deleteComment = async (req, res) => {
-    try {
-        const comment = await Comment.findById(req.params.commentId);
-        
-        if (!comment) {
-            return res.status(404).json({ message: "Comment not found" });
-        }
-
-        // Check ownership (or admin role)
-        if (comment.user.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: "Not authorized" });
-        }
-
-        // Remove comment reference from blog
-        await Blog.findByIdAndUpdate(
-            comment.post,
-            { $pull: { comments: comment._id } }
-        );
-
-        await comment.deleteOne();
-
-        res.status(200).json({ message: "Comment deleted successfully" });
-
-    } catch (error) {
-        res.status(500).json({ 
-            message: "Error deleting comment",
-            error: error.message 
-        });
-    }
+// @desc    Update comment
+// @route   PATCH /api/comments/:id
+exports.updateComment = async (req, res, next) => {
+  try {
+    const comment = await commentService.updateComment(
+      req.params.id,
+      req.user.id,
+      req.body.text
+    );
+    res.json({
+      success: true,
+      data: comment
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-module.exports = { addComment, getComments, deleteComment };
+// @desc    Delete comment
+// @route   DELETE /api/comments/:id
+exports.deleteComment = async (req, res, next) => {
+  try {
+    await commentService.deleteComment(
+      req.params.id,
+      req.user.id,
+      req.user.role === 'admin' // Pass admin status
+    );
+    res.json({
+      success: true,
+      data: null
+    });
+  } catch (err) {
+    next(err);
+  }
+};

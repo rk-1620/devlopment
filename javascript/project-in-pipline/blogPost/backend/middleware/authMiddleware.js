@@ -1,24 +1,39 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
+const ApiError = require('../utils/ApiErrors');
 
-function userauth (req, res, next) {
-  const token = req.headers.authorization;
-  const words = token.split(" ");
-  const jwtToken = words[1];
-
-  if (!token) {
-    return res.status(401).json({ message: "❌ No token provided" });
+const userauth = (req, res, next) => {
+  // 1. Check for token existence
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next(new ApiError(401, 'Authorization token required'));
   }
 
+  // 2. Extract token
+  const token = authHeader.split(' ')[1];
+
   try {
-    const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    // 3. Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Ensure we have the user ID in a consistent format
-    req.user ={_id :decoded.id, id:decoded.id};
-    
+    // 4. Standardize user object
+    req.user = {
+      id: decoded.id,
+      _id: decoded.id, // For Mongoose compatibility
+      role: decoded.role // Optional: Add role if your JWT includes it
+    };
+
     next();
-  } catch (error) {
-    res.status(401).json({ message: "❌ Invalid tokenn" });
+  } catch (err) {
+    // 5. Handle specific JWT errors
+    const errorMap = {
+      'TokenExpiredError': 'Token expired',
+      'JsonWebTokenError': 'Invalid token',
+      'NotBeforeError': 'Token not active'
+    };
+    
+    const message = errorMap[err.name] || 'Authentication failed';
+    next(new ApiError(401, message));
   }
 };
 
-module.exports = { userauth };
+module.exports = {userauth} ;

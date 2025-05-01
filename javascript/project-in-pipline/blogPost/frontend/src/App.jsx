@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import BlogFeed from './pages/blog/BlogFeed';
 // import BlogPost from './pages/blog/BlogPost';
 // import CreatePost from './pages/blog/CreatePost';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/adminDashboard';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage'
 import DashboardPage from './pages/dashboard/Dashboard';
@@ -40,6 +42,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/blogs/getBlogById/:id" element={<BlogDetailPage />} />
           <Route path="/getAllBlogs" element={<BlogList />} />
+
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           {/* Protected routes */}
 
           {/* <Route element={<ProtectedRoute />}>

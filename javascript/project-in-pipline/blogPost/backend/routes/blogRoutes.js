@@ -1,12 +1,26 @@
 const express = require("express");
 const { getAllBlogs, createBlog, getBlogById, updateBlog, deleteBlog } = require("../controllers/blogController");
 const authMiddleware = require("../middleware/authMiddleware");
-
+const validateRequest = require("../middleware/validateRequest");
+const {
+    blogCreateSchema,
+    blogUpdateSchema,
+    objectIdSchema
+  } = require("../validators/blogValidator");
 const router = express.Router();
 
-router.get("/getAllBlogs", getAllBlogs); // Public route - Fetch all blogs
-router.post("/createBlog", authMiddleware.userauth, createBlog); // Protected route - Only logged-in users can create a blog
-router.get("/getBlogById/:id",getBlogById);
-router.post("/updateBlog/:id", authMiddleware.userauth,updateBlog);
-router.post("/deleteBlog/:id", authMiddleware.userauth,deleteBlog);
+// Public routes
+router.get("/", getAllBlogs);
+router.get("/:id", 
+  validateRequest(objectIdSchema, 'params'), 
+  getBlogById
+);
+
+// Protected routes
+router.use(authMiddleware.userauth);
+
+router.post("/",validateRequest(blogCreateSchema),createBlog);
+router.patch("/:id",validateRequest(objectIdSchema, 'params'),validateRequest(blogUpdateSchema),updateBlog);
+router.delete("/:id",validateRequest(objectIdSchema, 'params'),deleteBlog);
+
 module.exports = router;
